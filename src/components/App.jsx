@@ -6,32 +6,22 @@ import Section from './Section/Section';
 import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
 import Notification from './Notification/Notification';
 
-export const App = () => {
-  // state = {
-  //   good: 0,
-  //   neutral: 0,
-  //   bad: 0,
-  // };
-
-  const [good, setGood] = useState('0');
-  const [neutral, setNeutral] = useState('0');
-  const [bad, setBad] = useState('0');
+export function App() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   const countTotalFeedback = () => {
-    // const { good, neutral, bad } = state;
-    const result = good + neutral + bad;
-    return result;
+    return good + neutral + bad;
   };
 
   const countPositiveFeedbackPercentage = () => {
-    const result = countTotalFeedback();
-    // const { good } = state;
-    const percentage = (good * 100) / result;
-    return Math.round(percentage);
+    return Math.round((good / countTotalFeedback()) * 100) || 0;
   };
 
-  const onLeaveFeedback = e => {
-    switch (e) {
+  const onLeaveFeedback = options => {
+    console.log(options);
+    switch (options) {
       case 'good':
         setGood(prevGood => prevGood + 1);
         break;
@@ -46,11 +36,6 @@ export const App = () => {
     }
   };
 
-  // const { good, neutral, bad } = state;
-  const positivePercentage = countPositiveFeedbackPercentage();
-  const total = countTotalFeedback();
-  // const stateData = Object.keys({ good: 0, neutral: 0, bad: 0 });
-
   return (
     <>
       <Container>
@@ -61,23 +46,23 @@ export const App = () => {
           />
         </Section>
 
-        {total === 0 ? (
-          <Notification message="No feedback given" />
-        ) : (
+        {countTotalFeedback() ? (
           <StatisticsBox>
             <Section title="Statistics">
               <Statistics
                 good={good}
                 neutral={neutral}
                 bad={bad}
-                total={total}
-                positivePercentage={positivePercentage}
+                total={countTotalFeedback()}
+                positivePercentage={countPositiveFeedbackPercentage()}
               />
             </Section>
           </StatisticsBox>
+        ) : (
+          <Notification message="No feedback given" />
         )}
       </Container>
       <GlobalStyle />
     </>
   );
-};
+}
