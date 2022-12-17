@@ -19,9 +19,9 @@ export function App() {
     return Math.round((good / countTotalFeedback()) * 100) || 0;
   };
 
-  const onLeaveFeedback = options => {
-    console.log(options);
-    switch (options) {
+  const onLeaveFeedback = e => {
+    console.log(e);
+    switch (e) {
       case 'good':
         setGood(prevGood => prevGood + 1);
         break;
